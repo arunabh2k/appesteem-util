@@ -70,7 +70,7 @@ else if(command == "dir")
 else
 {
   console.log("Please use following commands:");
-  console.log("appesteem-util get <blob path as listed in dir>  <path of download file> (download blob)");
-  console.log("appesteem-util put <path of file to upload> <blob path> (upload blob)");
-  console.log("appesteem-util dir (list blob)");
+  console.log("aeutil get <blob path as listed in dir>  <path of download file> (download blob)");
+  console.log("aeutil put <path of file to upload> <blob path> (upload blob)");
+  console.log("aeutil dir (list blob)");
 }
