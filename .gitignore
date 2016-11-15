@@ -1,0 +1,52 @@
+projects/*
+targets/*
+packages/*
+test/data/test_package.zip
+*.exe
+
+# Visual Studio #
+*.suo
+*.user
+.ntvs_analysis.dat
+obj/*
+examples/obj
+examples/.ntvs_analysis.dat
+examples/.vs
+examples/bin
+.vs
+TestResults/*
+
+# Node #
+node_modules/
+npm-debug.log
+azure_error
+checkstyle-result.xml
+test-result.xml
+
+# Mac OS #
+.DS_Store
+.DS_Store?
+
+# Windows #
+Thumbs.db
+
+# Credentials #
+*.cer
+*.pfx
+*.pem
+
+# WebStorm #
+.idea/
+
+# docs #
+docs/
+main.conf.json
+child.conf.json
+.grunt/
+
+# temporary test artifacts
+test/tmp/*
+
+# Nuget packages and corresponding codegen sources
+.nuget
+packages
