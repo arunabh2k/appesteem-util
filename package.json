@@ -1,6 +1,6 @@
 {
   "name": "appesteem-util",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "index.js",
   "description": "utility to access download of storage",
   "scripts": {
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/arunabh2k/appesteem-download.git"
+    "url": "git+https://github.com/arunabh2k/appesteem-util.git"
   },
   "keywords": [
     "none"
@@ -20,9 +20,9 @@
   "author": "Arunabh Trivedi",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/arunabh2k/appesteem-download/issues"
+    "url": "https://github.com/arunabh2k/appesteem-util/issues"
   },
-  "homepage": "https://github.com/arunabh2k/appesteem-download#readme",
+  "homepage": "https://github.com/arunabh2k/appesteem-util#readme",
   "dependencies": {
     "azure": "^1.2.0-preview"
   }
