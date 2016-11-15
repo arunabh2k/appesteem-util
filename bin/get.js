@@ -9,7 +9,7 @@ exports.get = function(blobName, fileName) {
   blobService.getBlobToStream(containerName, blobName, fs.createWriteStream(fileName), function(error, result, response){
     if (error) {
         console.error("Couldn't download blob %s", blobName);
-        console.error(err);
+        console.error(error);
     } else {
         console.log("Sucessfully downloaded blob %s to %s", blobName, fileName);
       // blob retrieved

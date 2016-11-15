@@ -6,7 +6,7 @@ var blobs = [];
 var blobService = azure.createBlobService(null, null, blobURL, process.env.AE_DOWNLOAD_SAS);
 function aggregateBlobs(err, result, cb) {
     if (err) {
-        cb(er);
+        cb(err);
     } else {
         blobs = blobs.concat(result.entries);
         if (result.continuationToken !== null) {
