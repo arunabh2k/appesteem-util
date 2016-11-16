@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-if(!process.env.AE_DOWNLOAD_SAS)
+if(!process.env.AE_BLOBSERVICE_SAS_URL)
 {
   console.log(" ");
-  console.log("Please set environment variable 'AE_DOWNLOAD_SAS' to SAS token provided");
+  console.log("Please set environment variable 'AE_BLOBSERVICE_SAS_URL' to Blob service SAS URL");
   console.log(" ");
   return;
 }
@@ -11,6 +11,7 @@ if(!process.env.AE_DOWNLOAD_SAS)
 var command = "help";
 var blobName = null;
 var fileName = null;
+var containerName = null;
 var check_command = function(val) {
   if(val.toLowerCase() == "get")
   {
@@ -33,16 +34,20 @@ var check_command = function(val) {
 process.argv.forEach(function (val, index, array) {
   if(index == 2)
   {
-    check_command(val);
+    containerName = val;
   }
   if(index == 3)
+  {
+    check_command(val);
+  }
+  if(index == 4)
   {
     if(command == "put")
       fileName = val;
     else
       blobName = val;
   }
-  if(index == 4)
+  if(index == 5)
   {
     if(command == "put")
       blobName = val;
@@ -51,26 +56,26 @@ process.argv.forEach(function (val, index, array) {
   }
 });
 
-if(command == "get" && blobName != null && fileName != null)
+if(command == "get" && containerName != null && blobName != null && fileName != null)
 {
   var get = require("./bin/get.js");
-  get.get(blobName, fileName);
+  get.get(containerName, blobName, fileName);
 }
-else if(command == "put" && blobName != null && fileName != null)
+else if(command == "put" && containerName != null && blobName != null && fileName != null)
 {
   var put = require("./bin/put.js");
-  put.put(fileName, blobName);
+  put.put(containerName, fileName, blobName);
 }
 
-else if(command == "dir")
+else if(command == "dir" && containerName != null)
 {
   var dir = require("./bin/dir.js");
-  dir.dir();
+  dir.dir(containerName);
 }
 else
 {
   console.log("Please use following commands:");
-  console.log("aeutil get <blob path as listed in dir>  <path of download file> (download blob)");
-  console.log("aeutil put <path of file to upload> <blob path> (upload blob)");
-  console.log("aeutil dir (list blob)");
+  console.log("aeutil <container name> get <blob path as listed in dir>  <path of download file> (download blob)");
+  console.log("aeutil <container name> put <path of file to upload> <blob path> (upload blob)");
+  console.log("aeutil <container name> dir (list blob)");
 }

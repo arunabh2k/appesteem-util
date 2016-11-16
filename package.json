@@ -1,6 +1,6 @@
 {
   "name": "appesteem-util",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "index.js",
   "description": "utility to access download of storage",
   "scripts": {

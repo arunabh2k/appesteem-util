@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 var azure = require("azure");
-var blobURL = "https://appesteemstorage.blob.core.windows.net";
-var containerName = 'downloads';
 var blobs = [];
-var blobService = azure.createBlobService(null, null, blobURL, process.env.AE_DOWNLOAD_SAS);
-function aggregateBlobs(err, result, cb) {
+var sasurl = process.env.AE_BLOBSERVICE_SAS_URL
+var blobURL = sasurl.substring(0, sasurl.indexOf('?'));
+var blobCred = sasurl.substring(sasurl.indexOf('?'));
+var blobService = azure.createBlobService(null, null, blobURL, blobCred);
+
+function aggregateBlobs(containerName, err, result, cb) {
     if (err) {
         cb(err);
     } else {
@@ -19,9 +21,9 @@ function aggregateBlobs(err, result, cb) {
         }
     }
 }
-exports.dir = function() {
+exports.dir = function(containerName) {
   blobService.listBlobsSegmented(containerName, null, function(err, result) {
-      aggregateBlobs(err, result, function(err, blobs) {
+      aggregateBlobs(containerName, err, result, function(err, blobs) {
           if (err) {
               console.log("Couldn't list blobs");
               console.error(err);

@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 var azure = require("azure");
 var fs = require('fs');
-var blobURL = "https://appesteemstorage.blob.core.windows.net";
-var containerName = 'downloads';
+var sasurl = process.env.AE_BLOBSERVICE_SAS_URL
+var blobURL = sasurl.substring(0, sasurl.indexOf('?'));
+var blobCred = sasurl.substring(sasurl.indexOf('?'));
+var blobService = azure.createBlobService(null, null, blobURL, blobCred);
 
-exports.get = function(blobName, fileName) {
-  var blobService = azure.createBlobService(null, null, blobURL, process.env.AE_DOWNLOAD_SAS);
+exports.get = function(containerName, blobName, fileName) {
   blobService.getBlobToStream(containerName, blobName, fs.createWriteStream(fileName), function(error, result, response){
     if (error) {
         console.error("Couldn't download blob %s", blobName);
