@@ -11,6 +11,8 @@ if(!process.env.AE_BLOBSERVICE_SAS_URL)
 var command = "help";
 var blobName = null;
 var fileName = null;
+var fromBlobName = null;
+var toBlobName = null;
 var containerName = null;
 var check_command = function(val) {
   if(val.toLowerCase() == "get")
@@ -20,6 +22,14 @@ var check_command = function(val) {
   else if(val.toLowerCase() == "put")
   {
     command = "put";
+  }
+  if(val.toLowerCase() == "del")
+  {
+    command = "del";
+  }
+  if(val.toLowerCase() == "move")
+  {
+    command = "move";
   }
   if(val.toLowerCase() == "dir")
   {
@@ -44,6 +54,8 @@ process.argv.forEach(function (val, index, array) {
   {
     if(command == "put")
       fileName = val;
+    else if(command == "move")
+      fromBlobName = val;
     else
       blobName = val;
   }
@@ -51,6 +63,8 @@ process.argv.forEach(function (val, index, array) {
   {
     if(command == "put")
       blobName = val;
+    else if(command == "move")
+      toBlobName = val;
     else
       fileName = val;
   }
@@ -66,7 +80,16 @@ else if(command == "put" && containerName != null && blobName != null && fileNam
   var put = require("./bin/put.js");
   put.put(containerName, fileName, blobName);
 }
-
+else if(command == "del" && containerName != null && blobName != null)
+{
+  var del = require("./bin/del.js");
+  del.del(containerName, blobName);
+}
+else if(command == "move" && containerName != null && fromBlobName != null && toBlobName != null)
+{
+  var move = require("./bin/move.js");
+  move.move(containerName, fromBlobName, toBlobName);
+}
 else if(command == "dir" && containerName != null)
 {
   var dir = require("./bin/dir.js");
@@ -77,5 +100,7 @@ else
   console.log("Please use following commands:");
   console.log("aeutil <container name> get <blob path as listed in dir>  <path of download file> (download blob)");
   console.log("aeutil <container name> put <path of file to upload> <blob path> (upload blob)");
+  console.log("aeutil <container name> del <path of file to upload> <blob path> (delete blob)");
+  console.log("aeutil <container name> move <from blob path> <to blob path> (move blob)");
   console.log("aeutil <container name> dir (list blob)");
 }
