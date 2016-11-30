@@ -14,7 +14,16 @@ var fileName = null;
 var fromBlobName = null;
 var toBlobName = null;
 var containerName = null;
+var overwrite = false;
 var check_command = function(val) {
+  if(val.toLowerCase() == "mget")
+  {
+    command = "mget";
+  }
+  else if(val.toLowerCase() == "mput")
+  {
+    command = "mput";
+  }
   if(val.toLowerCase() == "get")
   {
     command = "get";
@@ -42,6 +51,11 @@ var check_command = function(val) {
 }
 
 process.argv.forEach(function (val, index, array) {
+  if(val == "--overwrite")
+  {
+    overwrite = true;
+  }
+
   if(index == 2)
   {
     containerName = val;
@@ -52,7 +66,7 @@ process.argv.forEach(function (val, index, array) {
   }
   if(index == 4)
   {
-    if(command == "put")
+    if(command == "put" || command == "mput")
       fileName = val;
     else if(command == "move")
       fromBlobName = val;
@@ -61,16 +75,26 @@ process.argv.forEach(function (val, index, array) {
   }
   if(index == 5)
   {
+    if(command == "get" || command == "mget")
+      fileName = val;
     if(command == "put")
       blobName = val;
     else if(command == "move")
       toBlobName = val;
-    else
-      fileName = val;
   }
 });
 
-if(command == "get" && containerName != null && blobName != null && fileName != null)
+if(command == "mget" && containerName != null && blobName != null)
+{
+  var mget = require("./bin/mget.js");
+  mget.mget(containerName, blobName);
+}
+else if(command == "mput" && containerName != null && fileName != null)
+{
+  var mput = require("./bin/mput.js");
+  mput.mput(containerName, fileName, overwrite);
+}
+else if(command == "get" && containerName != null && blobName != null && fileName != null)
 {
   var get = require("./bin/get.js");
   get.get(containerName, blobName, fileName);
@@ -98,6 +122,8 @@ else if(command == "dir" && containerName != null)
 else
 {
   console.log("Please use following commands:");
+  console.log("aeutil <container name> mget <blob name pattern to get> (download blobs)");
+  console.log("aeutil <container name> mput <path pattern of file to upload> [--overwrite optional to overwrite existing blob] (upload blobs)");
   console.log("aeutil <container name> get <blob path as listed in dir>  <path of download file> (download blob)");
   console.log("aeutil <container name> put <path of file to upload> <blob path> (upload blob)");
   console.log("aeutil <container name> del <path of file to upload> <blob path> (delete blob)");
