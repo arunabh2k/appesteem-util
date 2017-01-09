@@ -126,7 +126,7 @@ else if(command == "mmove" && containerName != null && fromBlobName != null && t
 else if(command == "dir" && containerName != null)
 {
   var dir = require("./bin/dir.js");
-  dir.dir(containerName);
+  dir.dir(containerName, blobName);
 }
 else
 {
@@ -138,5 +138,5 @@ else
   console.log("aeutil <container name> put <path of file to upload> <blob path> (upload blob)");
   console.log("aeutil <container name> del <path of file to upload> <blob path> (delete blob)");
   console.log("aeutil <container name> move <from blob path> <to blob path> (move blob)");
-  console.log("aeutil <container name> dir (list blob)");
+  console.log("aeutil <container name> dir [blob pattern(optional)] (list blob)");
 }

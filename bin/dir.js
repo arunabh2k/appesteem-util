@@ -6,6 +6,10 @@ var blobURL = sasurl.substring(0, sasurl.indexOf('?'));
 var blobCred = sasurl.substring(sasurl.indexOf('?'));
 var blobService = azure.createBlobService(null, null, blobURL, blobCred);
 
+function matchRule(str, rule) {
+  return new RegExp("^" + rule.split("*").join(".*") + "$").test(str);
+}
+
 function aggregateBlobs(containerName, err, result, cb) {
     if (err) {
         cb(err);
@@ -21,7 +25,7 @@ function aggregateBlobs(containerName, err, result, cb) {
         }
     }
 }
-exports.dir = function(containerName) {
+exports.dir = function(containerName, blobPattern) {
   blobService.listBlobsSegmented(containerName, null, function(err, result) {
       aggregateBlobs(containerName, err, result, function(err, blobs) {
           if (err) {
@@ -31,7 +35,14 @@ exports.dir = function(containerName) {
               console.log("--------------------------------------------------");
               for(var ix in blobs)
               {
-                console.log("|  " + blobs[ix].name);
+                if(!blobPattern || blobPattern == "")
+                {
+                  console.log("|  " + blobs[ix].name);
+                }
+                else if(blobPattern && matchRule(blobs[ix].name,blobPattern))
+                {
+                  console.log("|  " + blobs[ix].name);
+                }
               }
               console.log("--------------------------------------------------");
           }
