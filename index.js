@@ -44,6 +44,10 @@ var check_command = function(val) {
   {
     command = "dir";
   }
+  if(val.toLowerCase() == "mmove")
+  {
+    command = "mmove";
+  }
   if(val.toLowerCase() == "test")
   {
     command = "test";
@@ -68,7 +72,7 @@ process.argv.forEach(function (val, index, array) {
   {
     if(command == "put" || command == "mput")
       fileName = val;
-    else if(command == "move")
+    else if(command == "move" || command == "mmove")
       fromBlobName = val;
     else
       blobName = val;
@@ -79,7 +83,7 @@ process.argv.forEach(function (val, index, array) {
       fileName = val;
     if(command == "put")
       blobName = val;
-    else if(command == "move")
+    else if(command == "move" || command == "mmove")
       toBlobName = val;
   }
 });
@@ -114,6 +118,11 @@ else if(command == "move" && containerName != null && fromBlobName != null && to
   var move = require("./bin/move.js");
   move.move(containerName, fromBlobName, toBlobName);
 }
+else if(command == "mmove" && containerName != null && fromBlobName != null && toBlobName != null)
+{
+  var mmove = require("./bin/mmove.js");
+  mmove.mmove(containerName, fromBlobName, toBlobName);
+}
 else if(command == "dir" && containerName != null)
 {
   var dir = require("./bin/dir.js");
@@ -124,6 +133,7 @@ else
   console.log("Please use following commands:");
   console.log("aeutil <container name> mget <blob name pattern to get> (download blobs)");
   console.log("aeutil <container name> mput <path pattern of file to upload> [--overwrite optional to overwrite existing blob] (upload blobs)");
+  console.log("aeutil <container name> mmove <blob name pattern to get <to blob dir path> (move blob)");
   console.log("aeutil <container name> get <blob path as listed in dir>  <path of download file> (download blob)");
   console.log("aeutil <container name> put <path of file to upload> <blob path> (upload blob)");
   console.log("aeutil <container name> del <path of file to upload> <blob path> (delete blob)");
