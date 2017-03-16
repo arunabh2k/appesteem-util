@@ -136,7 +136,7 @@ else
   console.log("aeutil <container name> mmove <blob name pattern to get <to blob dir path> (move blob)");
   console.log("aeutil <container name> get <blob path as listed in dir>  <path of download file> (download blob)");
   console.log("aeutil <container name> put <path of file to upload> <blob path> (upload blob)");
-  console.log("aeutil <container name> del <path of file to upload> <blob path> (delete blob)");
+  console.log("aeutil <container name> del <path of blob to delete> (delete blob)");
   console.log("aeutil <container name> move <from blob path> <to blob path> (move blob)");
   console.log("aeutil <container name> dir [blob pattern(optional)] (list blob)");
 }

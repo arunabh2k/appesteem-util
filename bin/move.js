@@ -8,9 +8,10 @@ var blobService = azure.createBlobService(null, null, blobURL, blobCred);
 
 exports.move = function(containerName, fromBlobName, toBlobName) {
   var fromBlobUrl = blobService.getUrl(containerName, fromBlobName, null);
+  fromBlobUrl += blobCred;
   blobService.startCopyBlob(fromBlobUrl, containerName, toBlobName, null, function(error, result, response){
     if (error) {
-        console.error("Couldn't move blob %s", fromBlobName);
+        console.error("Couldn't move blob %s (%s)", fromBlobName, fromBlobUrl);
         console.error(error);
     } else {
       blobService.deleteBlob(containerName, fromBlobName, null, function(error, result, response){

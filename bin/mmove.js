@@ -16,6 +16,7 @@ function matchRule(str, rule) {
 
 var moveFile = function(containerName, fromBlobName, toBlobName) {
   var fromBlobUrl = blobService.getUrl(containerName, fromBlobName, null);
+  fromBlobUrl += blobCred;
   blobService.startCopyBlob(fromBlobUrl, containerName, toBlobName, null, function(error, result, response){
     if (error) {
         console.error("Couldn't move blob %s", fromBlobName);
