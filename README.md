@@ -10,5 +10,4 @@ aeutil
 will show all the possible commands
 
 Supported feature
-put, get, dir, del(delete), mget, mput, move
-
+put, get, dir, move, del(delete), mget, mput, mmove
