@@ -15,6 +15,7 @@ var fromBlobName = null;
 var toBlobName = null;
 var containerName = null;
 var overwrite = false;
+var descend = false;
 var check_command = function(val) {
   if(val.toLowerCase() == "mget")
   {
@@ -59,6 +60,10 @@ process.argv.forEach(function (val, index, array) {
   {
     overwrite = true;
   }
+  if(val == "--descend")
+  {
+    descend = true;
+  }
 
   if(index == 2)
   {
@@ -96,7 +101,7 @@ if(command == "mget" && containerName != null && blobName != null)
 else if(command == "mput" && containerName != null && fileName != null)
 {
   var mput = require("./bin/mput.js");
-  mput.mput(containerName, fileName, overwrite);
+  mput.mput(containerName, fileName, overwrite, descend);
 }
 else if(command == "get" && containerName != null && blobName != null && fileName != null)
 {
@@ -132,7 +137,7 @@ else
 {
   console.log("Please use following commands:");
   console.log("aeutil <container name> mget <blob name pattern to get> (download blobs)");
-  console.log("aeutil <container name> mput <path pattern of file to upload> [--overwrite optional to overwrite existing blob] (upload blobs)");
+  console.log("aeutil <container name> mput <path pattern of file to upload> [--overwrite optional for existing blob --descend optional to recurse dirs] (upload blobs)");
   console.log("aeutil <container name> mmove <blob name pattern to get <to blob dir path> (move blob)");
   console.log("aeutil <container name> get <blob path as listed in dir>  <path of download file> (download blob)");
   console.log("aeutil <container name> put <path of file to upload> <blob path> (upload blob)");
