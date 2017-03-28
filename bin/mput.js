@@ -29,14 +29,20 @@ var uploadFile = function(fileName, containerName, overwrite) {
   });
 }
 
-exports.mput = function(containerName, filePattern, overwrite) {
+var mputdet = function(containerName, filePattern, overwrite, descend) {
     console.log(filePattern);
     glob(filePattern, {mark: true}, function (er, files) {
     for(var ix in files)
     {
       var fileName = files[ix];
       if(fs.lstatSync(fileName).isDirectory()) {
-        console.log("skipping directory: " + fileName);
+        if(descend) {
+          var newFileName = fileName + "/*";
+          mputdet(containerName, newFileName, overwrite, descend);
+        }
+        else {
+          console.log("skipping directory: " + fileName);
+        }
       }
       else {
         uploadFile(fileName, containerName, overwrite);
@@ -44,3 +50,8 @@ exports.mput = function(containerName, filePattern, overwrite) {
     }
   });
 }
+
+exports.mput = function(containerName, filePattern, overwrite, descend) {
+	mputdet(containerName, filePattern, overwrite, descend);
+}
+
