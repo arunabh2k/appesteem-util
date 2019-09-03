@@ -6,20 +6,15 @@ var blobURL = sasurl.substring(0, sasurl.indexOf('?'));
 var blobCred = sasurl.substring(sasurl.indexOf('?'));
 var blobService = azure.createBlobService(null, null, blobURL, blobCred);
 
-function matchRule(str, rule) {
-  rule = rule.replace(/\(/g, '\\(');
-  rule = rule.replace(/\)/g, '\\)');
-  return new RegExp("^" + rule.split("*").join(".*") + "$").test(str);
-}
-
-function aggregateBlobs(containerName, err, result, cb) {
+function aggregateBlobs(containerName, blobPrefix, err, result, cb) {
     if (err) {
         cb(err);
     } else {
         blobs = blobs.concat(result.entries);
         if (result.continuationToken !== null) {
-            blobService.listBlobsSegmented(
+            blobService.listBlobsSegmentedWithPrefix(
                 containerName,
+                blobPrefix,
                 result.continuationToken,
                 aggregateBlobs);
         } else {
@@ -27,9 +22,9 @@ function aggregateBlobs(containerName, err, result, cb) {
         }
     }
 }
-exports.dir = function(containerName, blobPattern) {
-  blobService.listBlobsSegmented(containerName, null, function(err, result) {
-      aggregateBlobs(containerName, err, result, function(err, blobs) {
+exports.dirprefix = function(containerName, blobPrefix) {
+  blobService.listBlobsSegmentedWithPrefix(containerName, blobPrefix, null, function(err, result) {
+      aggregateBlobs(containerName, blobPrefix, err, result, function(err, blobs) {
           if (err) {
               console.log("Couldn't list blobs");
               console.error(err);
@@ -37,14 +32,7 @@ exports.dir = function(containerName, blobPattern) {
               console.log("--------------------------------------------------");
               for(var ix in blobs)
               {
-                if(!blobPattern || blobPattern == "")
-                {
                   console.log("|  " + blobs[ix].name);
-                }
-                else if(blobPattern && matchRule(blobs[ix].name,blobPattern))
-                {
-                  console.log("|  " + blobs[ix].name);
-                }
               }
               console.log("--------------------------------------------------");
           }

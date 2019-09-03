@@ -45,6 +45,10 @@ var check_command = function(val) {
   {
     command = "dir";
   }
+  if(val.toLowerCase() == "dirprefix")
+  {
+    command = "dirprefix";
+  }
   if(val.toLowerCase() == "dirmd5")
   {
     command = "dirmd5";
@@ -137,6 +141,11 @@ else if(command == "dir" && containerName != null)
   var dir = require("./bin/dir.js");
   dir.dir(containerName, blobName);
 }
+else if(command == "dirprefix" && containerName != null && blobName != null)
+{
+  var dirprefix = require("./bin/dirprefix.js");
+  dirprefix.dirprefix(containerName, blobName);
+}
 else if(command == "dirmd5" && containerName != null)
 {
   var dirmd5 = require("./bin/dirmd5.js");
@@ -153,5 +162,6 @@ else
   console.log("aeutil <container name> del <path of blob to delete> (delete blob)");
   console.log("aeutil <container name> move <from blob path> <to blob path> (move blob)");
   console.log("aeutil <container name> dir [blob pattern(optional)] (list blob)");
+  console.log("aeutil <container name> dirprefix blobprefix (list blob with prefix)");
   console.log("aeutil <container name> dirmd5 [blob pattern(optional)] (list blob)");
 }
